@@ -83,10 +83,13 @@ function QuestionCollection(){
   return args;
 }
 
-/*Question.prototype.nextQuestion = function(){
-var i = this.number;
-questionSeries[++i].loadQuestion();
-}*/
+function rightAnswer(){
+  $('.status').append("You Got It");
+}
+
+function wrongAnswer(){
+  $('.status').append("Wrong Answer");
+}
 
 
 $(document).ready(function(){
@@ -96,14 +99,3 @@ $(document).ready(function(){
   var catView = new QuestionView(catCollection);
 
 });
-
-
-
-
-function rightAnswer(){
-  $('.status').append("You Got It");
-}
-
-function wrongAnswer(){
-  $('.status').append("Wrong Answer");
-}
