@@ -34,7 +34,9 @@ function Question(options){
   this.choices = options.choiceArray;
 }
 
-
+/**
+ *
+ */
 function QuestionView (collection){
   this.collection = collection;
   this.initalize();
@@ -47,7 +49,7 @@ QuestionView.prototype.initalize = function() {
 }
 
 QuestionView.prototype.nextQuestion = function() {
-  this.currentQuestion = this.collection.shift(); //array of questions
+  this.currentQuestion = this.collection.shift(); //return first item array of questions
   this.showQuestion();
   this.handleQuestion();
 }
@@ -60,11 +62,12 @@ QuestionView.prototype.showQuestion = function(){
   for (var x in this.currentQuestion.choices){
     $('#stage').append("<input type='radio' name='group' value='" + this.currentQuestion.choices[x] +"'><span>" + this.currentQuestion.choices[x] + "</span><br/>");
   }
-
+  //This can be removed if you dont want an infinte loop.
   this.collection.push(this.currentQuestion);
 }
 
 QuestionView.prototype.handleQuestion = function(){
+  // store a reference to QuestionView so we dont have to type alot
   var self = this;
   $('input').click(function() {
     if ($('input:checked').val() == self.currentQuestion.answer){
@@ -79,12 +82,15 @@ QuestionView.prototype.handleQuestion = function(){
 
 
 function QuestionCollection(){
+  //Check if its an Array then dont do any operations
   if(arguments.length === 1 && instanceof Array){
     var arrayList = arguments[0];
   }else{
+    //slice is a way to copy an array
     var slice = Array.prototype.slice;
     arrayList = slice.apply(arguments)
   }
+  // so map does each but returns an array after the operations
   arrayList.map(function(elem,index){
     return new Question(elem);
   });
@@ -100,10 +106,11 @@ function wrongAnswer(){
 
 
 $(document).ready(function(){
-var list = [question1, question2, question4, question3];
-
+var list = [];
+//Create an instance of the QuestionCollection so that
   var catCollection = new QuestionCollection(list);
-
+// Every View instance needs an array of questions in order
+// render the current question
   var catView = new QuestionView(catCollection);
 
 });
