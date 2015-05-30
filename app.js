@@ -91,7 +91,7 @@ function QuestionCollection(){
     arrayList = slice.apply(arguments)
   }
   // so map does each but returns an array after the operations
-  arrayList.map(function(elem,index){
+  return arrayList.map(function(elem,index){
     return new Question(elem);
   });
 }
