@@ -5,37 +5,45 @@ var question1 = new Question({
   choices: ["8","12","16", "24"]
 });
 
-var question2 = new Question(
+var question2 = new Question({
   title: "A term for a group of cats is:",
   image: "images/cats.jpg",
   answer: "clowder",
   choices: ["caggle","covey","clutch", "clowder"]
-);
+});
 
-var question3 = new Question(
+var question3 = new Question({
   title:"A term for a group of kittens is:",
   image:"images/kittens.jpg",
   answer:"kindle",
   choices:["kaggle","kindle","nook", "kaboodle"]
-);
+});
 
-var question4 = new Question(
+var question4 = new Question({
   title:"What’s it called when a cat rubs the side of its head on you or on furniture?",
   image:"images/cat-rubbing.jpg",
   answer:"bunting",
   choices:["beaning","bunting","brocking", "tagging"]
-);
+});
 
 //MODEL
 function Question(options){
+  this.ensureCorrect(options);
   this.title = options.title;
   this.image = options.image;
   this.answer = options.answer;
   this.choices = options.choiceArray;
 }
 
+Question.prototype.ensureCorrect = function(options) {
+  if (!options.title) {
+    throw new Error("YOU NEED A TITLE");
+  }
+}
+
 /**
- *
+ * [1,2,3,4]
+ * [2,3,4]
  */
 function QuestionView (collection){
   this.collection = collection;
@@ -81,6 +89,8 @@ QuestionView.prototype.handleQuestion = function(){
 
 
 
+//Model is a single question...
+//Collection is an array of all questions
 function QuestionCollection(){
   //Check if its an Array then dont do any operations
   if(arguments.length === 1 && instanceof Array){
@@ -90,6 +100,7 @@ function QuestionCollection(){
     var slice = Array.prototype.slice;
     arrayList = slice.apply(arguments)
   }
+
   // so map does each but returns an array after the operations
   return arrayList.map(function(elem,index){
     return new Question(elem);
@@ -106,9 +117,8 @@ function wrongAnswer(){
 
 
 $(document).ready(function(){
-var list = [];
 //Create an instance of the QuestionCollection so that
-  var catCollection = new QuestionCollection(list);
+  var catCollection = new QuestionCollection(question1,question2,question3,question4);
 // Every View instance needs an array of questions in order
 // render the current question
   var catView = new QuestionView(catCollection);
