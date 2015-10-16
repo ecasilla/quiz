@@ -1,3 +1,4 @@
+
 var question1 = {
   title: "A cat has how many whiskers, on average?",
   image: "images/whiskers.jpg",
@@ -29,6 +30,7 @@ var question4 = {
 //MODEL
 function Question(options){
   this.ensureCorrect(options);
+  console.log(options);
   this.title = options.title;
   this.image = options.image;
   this.answer = options.answer;
@@ -46,38 +48,38 @@ Question.prototype.ensureCorrect = function ensureCorrect(options) {
  * [1,2,3,4]
  * [2,3,4]
  */
+//VIEW
 function QuestionView (collection){
   this.collection = collection;
   this.initalize();
 }
 
-QuestionView.prototype.initalize = function() {
+QuestionView.prototype.initalize = function initalize() {
  this.nextQuestion();
- this.showQuestion();
- this.handleQuestion();
 }
 
-QuestionView.prototype.nextQuestion = function() {
+QuestionView.prototype.nextQuestion = function nextQuestion() {
   this.currentQuestion = this.collection.shift(); //return first item array of questions
   this.showQuestion();
   this.handleQuestion();
 }
 
-QuestionView.prototype.showQuestion = function(){
+QuestionView.prototype.showQuestion = function showQuestion(){
+var $stage = $('#stage');
   $('#stage *').remove();
-  $('#stage').prepend("<img src='" + this.currentQuestion.image + "'/>");
-  $('#stage').append("<h2>" + this.currentQuestion.title + "</h2>");
+  $stage.prepend("<img src='" + this.currentQuestion.image + "'/>");
+  $stage.append("<h2>" + this.currentQuestion.title + "</h2>");
   $('h2').text(this.currentQuestion.title);
   for (var x in this.currentQuestion.choices){
-    $('#stage').append("<input type='radio' name='group' value='" + this.currentQuestion.choices[x] +"'><span>" + this.currentQuestion.choices[x] + "</span><br/>");
+    $stage.append("<input type='radio' name='group' value='" + this.currentQuestion.choices[x] +"'><span>" + this.currentQuestion.choices[x] + "</span><br/>");
   }
   //This can be removed if you dont want an infinte loop.
   this.collection.push(this.currentQuestion);
 }
 
-QuestionView.prototype.handleQuestion = function(){
+QuestionView.prototype.handleQuestion = function handleQuestion(){
   // store a reference to QuestionView so we dont have to type alot
-  $('input').click(function() {
+  $('input').on('click', function clickHandler() {
     if ($('input:checked').val() === this.currentQuestion.answer){
       rightAnswer();
       this.nextQuestion();
@@ -88,13 +90,13 @@ QuestionView.prototype.handleQuestion = function(){
 }
 
 
-
 //Model is a single question...
 //Collection is an array of all questions
 function QuestionCollection(){
   //Check if its an Array then dont do any operations
+  var arrayList;
   if(arguments.length === 1 && arguments[0] instanceof Array){
-    var arrayList = arguments[0];
+      arrayList = arguments[0];
   }else{
     //slice is a way to copy an array
     var slice = Array.prototype.slice;
@@ -102,7 +104,7 @@ function QuestionCollection(){
   }
 
   // so map does each but returns an array after the operations
-  return arrayList.map(function(elem,index){
+  return arrayList.map(function(elem){
     return new Question(elem);
   });
 }
@@ -116,7 +118,7 @@ function rightAnswer(){
 function wrongAnswer(){
   var $status = $('.status');
   $status.empty();
-  $status.append("Wrong Answer");
+  $status.append("Wrong Answer Try Again");
 }
 
 
