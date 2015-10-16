@@ -1,30 +1,30 @@
-var question1 = new Question({
+var question1 = {
   title: "A cat has how many whiskers, on average?",
   image: "images/whiskers.jpg",
   answer: "24",
   choices: ["8","12","16", "24"]
-});
+};
 
-var question2 = new Question({
+var question2 = {
   title: "A term for a group of cats is:",
   image: "images/cats.jpg",
   answer: "clowder",
   choices: ["caggle","covey","clutch", "clowder"]
-});
+};
 
-var question3 = new Question({
+var question3 = {
   title:"A term for a group of kittens is:",
   image:"images/kittens.jpg",
   answer:"kindle",
   choices:["kaggle","kindle","nook", "kaboodle"]
-});
+};
 
-var question4 = new Question({
+var question4 = {
   title:"What’s it called when a cat rubs the side of its head on you or on furniture?",
   image:"images/cat-rubbing.jpg",
   answer:"bunting",
   choices:["beaning","bunting","brocking", "tagging"]
-});
+};
 
 //MODEL
 function Question(options){
@@ -32,10 +32,11 @@ function Question(options){
   this.title = options.title;
   this.image = options.image;
   this.answer = options.answer;
-  this.choices = options.choiceArray;
+  this.choices = options.choices;
+  return this;
 }
 
-Question.prototype.ensureCorrect = function(options) {
+Question.prototype.ensureCorrect = function ensureCorrect(options) {
   if (!options.title) {
     throw new Error("YOU NEED A TITLE");
   }
@@ -76,15 +77,14 @@ QuestionView.prototype.showQuestion = function(){
 
 QuestionView.prototype.handleQuestion = function(){
   // store a reference to QuestionView so we dont have to type alot
-  var self = this;
   $('input').click(function() {
-    if ($('input:checked').val() == self.currentQuestion.answer){
+    if ($('input:checked').val() === this.currentQuestion.answer){
       rightAnswer();
-      self.nextQuestion();
+      this.nextQuestion();
     } else {
       wrongAnswer();
     }
-  });
+  }.bind(this));
 }
 
 
@@ -93,7 +93,7 @@ QuestionView.prototype.handleQuestion = function(){
 //Collection is an array of all questions
 function QuestionCollection(){
   //Check if its an Array then dont do any operations
-  if(arguments.length === 1 && instanceof Array){
+  if(arguments.length === 1 && arguments[0] instanceof Array){
     var arrayList = arguments[0];
   }else{
     //slice is a way to copy an array
@@ -108,11 +108,15 @@ function QuestionCollection(){
 }
 
 function rightAnswer(){
-  $('.status').append("You Got It");
+  var $status = $('.status');
+  $status.empty();
+  $status.append("You Got It");
 }
 
 function wrongAnswer(){
-  $('.status').append("Wrong Answer");
+  var $status = $('.status');
+  $status.empty();
+  $status.append("Wrong Answer");
 }
 
 
